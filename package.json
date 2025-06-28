@@ -22,7 +22,7 @@
     "dist/",
     "src/"
   ],
-  "homepage": "https://hmpl-lang.dev/hmpl-dom.html",
+  "homepage": "https://hmpl-lang.dev/dom.html",
   "license": "MIT",
   "keywords": [
     "fetch",

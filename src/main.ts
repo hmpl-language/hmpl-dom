@@ -1,34 +1,45 @@
-import hmpl from "hmpl-js";
+"use strict";
 
-const hmplDOM = (() => {
-  let initialized = false;
-  let initParams = () => ({});
+import hmpl, {
+  HMPLCompileOptions,
+  HMPLIdentificationRequestInit,
+  HMPLRequestInit,
+  HMPLRequestInitFunction
+} from "hmpl-js";
+import { HMPLInitFunction } from "./types";
 
-  function mountTemplates() {
-    const templates = document.querySelectorAll("template[data-hmpl]");
+let initialized = false;
+let currentCompileOptions: HMPLCompileOptions | undefined;
+let currecntTemplateFunctionOptions:
+  | HMPLIdentificationRequestInit[]
+  | HMPLRequestInit
+  | HMPLRequestInitFunction
+  | undefined;
 
-    templates.forEach((template) => {
-      const templateHTML = template.innerHTML;
-      const templateFn = hmpl.compile(templateHTML);
-      const result = templateFn(initParams).response;
-      template.replaceWith(result);
-    });
-  }
+function mountTemplates() {
+  const templates = document.querySelectorAll("template[data-hmpl]");
 
-  function init(paramsFn = () => ({})) {
-    if (initialized) return;
-    initialized = true;
-    initParams = paramsFn;
+  templates.forEach((template) => {
+    const templateHTML = template.innerHTML;
+    const templateFn = hmpl.compile(templateHTML, currentCompileOptions);
+    const result = templateFn(currecntTemplateFunctionOptions).response;
+    template.replaceWith(result);
+  });
+}
+
+export const init: HMPLInitFunction = (
+  compileOptions,
+  templateFunctionOptions
+) => {
+  if (initialized) return;
+  initialized = true;
+  currentCompileOptions = compileOptions;
+  currecntTemplateFunctionOptions = templateFunctionOptions;
+  mountTemplates();
+};
+
+queueMicrotask(() => {
+  if (!initialized) {
     mountTemplates();
   }
-
-  queueMicrotask(() => {
-    if (!initialized) {
-      mountTemplates();
-    }
-  });
-
-  return { init };
-})();
-
-export default hmplDOM;
+});

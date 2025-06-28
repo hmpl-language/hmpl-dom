@@ -21,7 +21,10 @@
     "esModuleInterop": true,
     "strict": true,
     "skipLibCheck": true,
-    "outDir": "./build"
+    "outDir": "./build",
+    "paths": {
+      "hmpl-js": ["./node_modules/hmpl-js/dist/index"]
+    }
   },
   "include": ["./src/**/*"],
   "exclude": ["node_modules"]

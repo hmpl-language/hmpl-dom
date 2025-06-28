@@ -7,12 +7,17 @@ import {
   HMPLRequestInitFunction
 } from "hmpl-js";
 
-type HMPLInitFunction = (
-  compileOptions?: HMPLCompileOptions,
-  templateFunctionOptions?:
-    | HMPLIdentificationRequestInit[]
-    | HMPLRequestInit
-    | HMPLRequestInitFunction
-) => void;
+type HMPLInitOption = {
+  id: string | number;
+  value: {
+    compileOptions?: HMPLCompileOptions;
+    templateFunctionOptions?:
+      | HMPLIdentificationRequestInit[]
+      | HMPLRequestInit
+      | HMPLRequestInitFunction;
+  };
+};
 
-export { HMPLInitFunction };
+type HMPLInitFunction = (options: HMPLInitOption[]) => void;
+
+export { HMPLInitFunction, HMPLInitOption };

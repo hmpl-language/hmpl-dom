@@ -1,7 +1,7 @@
 {
   "name": "hmpl-dom",
   "version": "0.0.1",
-  "description": "🐜 Server-oriented customizable templating for JavaScript",
+  "description": "A module for using HMPL syntax directly in HTML, without the need for compilation on the JS side",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -22,7 +22,7 @@
     "dist/",
     "src/"
   ],
-  "homepage": "https://hmpl-lang.dev/real-dom-module.html",
+  "homepage": "https://hmpl-lang.dev/hmpl-dom.html",
   "license": "MIT",
   "keywords": [
     "fetch",

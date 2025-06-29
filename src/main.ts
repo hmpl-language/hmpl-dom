@@ -73,17 +73,12 @@ const onDocumentLoad = (callback: () => void): void => {
 };
 
 const mountTemplates = (): void => {
-  const templates = document.querySelectorAll("[data-hmpl], [hmpl]");
+  const templates = document.querySelectorAll(
+    "template[data-hmpl], template[hmpl]"
+  );
 
   for (let i = 0; i < templates.length; i++) {
-    const template = templates[i];
-    const nestedElements = template.querySelectorAll("[data-hmpl], [hmpl]");
-    if (nestedElements.length > 0) {
-      createError(
-        `${TEMPLATE_ERROR}: Nested template with data-hmpl is not allowed`
-      );
-    }
-
+    const template = templates[i] as HTMLTemplateElement;
     const hasDataHmpl = template.hasAttribute("data-hmpl");
     const hasHmpl = template.hasAttribute("hmpl");
     if (hasDataHmpl && hasHmpl) {
@@ -109,14 +104,20 @@ const mountTemplates = (): void => {
       option = initOptionsMap.get(optionId);
     }
 
-    const templateClone = template.cloneNode(true) as Element;
+    const templateHTML = template.innerHTML as string;
 
-    templateClone.removeAttribute("data-hmpl");
-    templateClone.removeAttribute("hmpl");
-    templateClone.removeAttribute("data-option-id");
-    templateClone.removeAttribute("optionId");
+    if (template.content.children.length > 1) {
+      createError(
+        `${TEMPLATE_ERROR}: Template must contain exactly one root element, found ${template.content.children.length}`
+      );
+    }
 
-    const templateHTML = templateClone.outerHTML;
+    if (template.content.children.length === 0) {
+      createError(
+        `${TEMPLATE_ERROR}: Template must contain at least one element`
+      );
+    }
+
     const compileOptions = option?.value.compileOptions || {};
     const templateFunctionOptions = option?.value.templateFunctionOptions || {};
 

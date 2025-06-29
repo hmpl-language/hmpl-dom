@@ -1,6 +1,6 @@
 "use strict";
 
-import { init } from "../src/build";
+import { init } from "../build/main";
 
 const hmplDOM = {
   init

@@ -28,8 +28,11 @@ Add a template to your HTML file using the `<template>` tag and the `data-hmpl` 
     <main>
       <template data-hmpl data-config-id="my-component-config">
         <div>
-          {{#request src="/api/my-component.html"}} {{#indicator
-          trigger="pending"}} Loading... {{/indicator}} {{/request}}
+          {{#request src="/api/my-component.html"}}
+            {{#indicator trigger="pending"}}
+              Loading...
+            {{/indicator}}
+          {{/request}}
         </div>
       </template>
     </main>
@@ -55,9 +58,9 @@ This approach allows you to declaratively define dynamic, server-driven componen
 
 </details>
 
-## Options
+## Configs
 
-Each option object for `init` can contain:
+Each config object for `init` can contain:
 
 - **id**: (string) — Unique identifier for the template, must match the `data-config-id` in HTML.
 - **value**: (object)
@@ -81,7 +84,7 @@ init([
 ## Important Notes
 
 - Each `<template>` must contain exactly one root element.
-- The `data-config-id` attribute is required and cannot be empty.
+- The `data-config-id` attribute is not required and cannot be empty.
 - For every `configId`, a corresponding option must be defined in the `init` call.
 
 ## Example

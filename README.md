@@ -19,36 +19,47 @@ Add a template to your HTML file using the `<template>` tag and the `data-hmpl` 
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Example</title>
-</head>
-<body>
-  <main>
-    <template data-hmpl data-option-id="my-component-option">
-      <div>
-        {{#request src="/api/my-component.html"}}
-          {{#indicator trigger="pending"}}
-            Loading...
-          {{/indicator}}
-        {{/request}}
-      </div>
-    </template>
-  </main>
-  <script src="https://unpkg.com/json5/dist/index.min.js"></script>
-  <script src="https://unpkg.com/dompurify/dist/purify.min.js"></script>
-  <script src="https://unpkg.com/hmpl-js/dist/hmpl.min.js"></script>
-  <script src="https://unpkg.com/hmpl-dom/dist/hmpl-dom.min.js"></script>
-</body>
+  </head>
+  <body>
+    <main>
+      <template data-hmpl data-config-id="my-component-config">
+        <div>
+          {{#request src="/api/my-component.html"}} {{#indicator
+          trigger="pending"}} Loading... {{/indicator}} {{/request}}
+        </div>
+      </template>
+    </main>
+    <script src="https://unpkg.com/json5/dist/index.min.js"></script>
+    <script src="https://unpkg.com/dompurify/dist/purify.min.js"></script>
+    <script src="https://unpkg.com/hmpl-js/dist/hmpl.min.js"></script>
+    <script src="https://unpkg.com/hmpl-dom/dist/hmpl-dom.min.js"></script>
+  </body>
 </html>
 ```
+
+<details>
+<summary>Explain this HTML</summary>
+
+This HTML example demonstrates how to use the `hmpl-dom` library to mount HMPL templates directly in your page:
+
+- The `<template data-hmpl data-config-id="my-component-config">` tag defines a template that will not be rendered immediately. It contains HMPL syntax for dynamic content loading.
+- Inside the template, the `{{#request src="/api/my-component.html"}} ... {{/request}}` block will fetch content from the server. While the request is pending, the `{{#indicator trigger="pending"}} Loading... {{/indicator}}` block will show a loading message.
+- The scripts at the bottom load all required dependencies from CDN: `json5`, `dompurify`, `hmpl-js`, and `hmpl-dom`.
+- When the page loads, `hmpl-dom` will automatically find all `<template data-hmpl ...>` elements, compile them using HMPL, and replace the template with the rendered result in the DOM.
+
+This approach allows you to declaratively define dynamic, server-driven components in your HTML, and have them automatically rendered and updated by the HMPL engine.
+
+</details>
 
 ## Options
 
 Each option object for `init` can contain:
 
-- **id**: (string) — Unique identifier for the template, must match the `data-option-id` in HTML.
+- **id**: (string) — Unique identifier for the template, must match the `data-config-id` in HTML.
 - **value**: (object)
   - **compile**: (object) — Compile options for HMPL (e.g., `{ memo: true }`).
   - **templateFunction**: (object) — Data or parameters to be passed to the template function.
@@ -70,16 +81,18 @@ init([
 ## Important Notes
 
 - Each `<template>` must contain exactly one root element.
-- The `data-option-id` attribute is required and cannot be empty.
-- For every `optionId`, a corresponding option must be defined in the `init` call.
+- The `data-config-id` attribute is required and cannot be empty.
+- For every `configId`, a corresponding option must be defined in the `init` call.
 
 ## Example
 
 ```html
-<template data-hmpl data-option-id="clicker-option">
+<template data-hmpl data-config-id="clicker-config">
   <div>
     <button data-action="increment" id="btn">Click!</button>
-    <div>Clicks: {{#request src="/api/clicks" after="click:#btn"}}{{/request}}</div>
+    <div>
+      Clicks: {{#request src="/api/clicks" after="click:#btn"}}{{/request}}
+    </div>
   </div>
 </template>
 ```
@@ -89,12 +102,14 @@ import { init } from "hmpl-dom";
 
 init([
   {
-    id: "clicker-option",
+    id: "clicker-config",
     value: {
       compile: { memo: true },
       templateFunction: ({ request: { event } }) => ({
-         body: JSON.stringify({ action: event.target.getAttribute("data-action") })
-    })
+        body: JSON.stringify({
+          action: event.target.getAttribute("data-action")
+        })
+      })
     }
   }
 ]);

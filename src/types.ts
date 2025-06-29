@@ -25,12 +25,12 @@ type HMPLInitOption = {
      * Options passed to the HMPL compile function.
      * Controls how templates are compiled and processed.
      */
-    compileOptions?: HMPLCompileOptions;
+    compile?: HMPLCompileOptions;
     /**
      * Options passed to the template function during execution.
      * Can be a single request init object, a function, or an array of identification request init objects.
      */
-    templateFunctionOptions?:
+    templateFunction?:
       | HMPLIdentificationRequestInit[]
       | HMPLRequestInit
       | HMPLRequestInitFunction;

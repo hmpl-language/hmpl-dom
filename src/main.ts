@@ -5,6 +5,10 @@ import { HMPLInitFunction, HMPLInitOption } from "./types";
 
 const INIT_ERROR = `InitError`;
 const TEMPLATE_ERROR = `TemplateError`;
+const DATA_HMPL_ATTR = "data-hmpl";
+const HMPL_ATTR = "hmpl";
+const DATA_OPTION_ID_ATTR = "data-option-id";
+const OPTION_ID_ATTR = "optionId";
 
 /**
  * Throws a new error with the provided message.
@@ -74,34 +78,47 @@ const onDocumentLoad = (callback: () => void): void => {
 
 const mountTemplates = (): void => {
   const templates = document.querySelectorAll(
-    "template[data-hmpl], template[hmpl]"
+    `template[${DATA_HMPL_ATTR}], template[${HMPL_ATTR}]`
   );
 
   for (let i = 0; i < templates.length; i++) {
     const template = templates[i] as HTMLTemplateElement;
-    const hasDataHmpl = template.hasAttribute("data-hmpl");
-    const hasHmpl = template.hasAttribute("hmpl");
+
+    const hasDataHmpl = template.hasAttribute(DATA_HMPL_ATTR);
+    const hasHmpl = template.hasAttribute(HMPL_ATTR);
     if (hasDataHmpl && hasHmpl) {
       createError(
-        `${TEMPLATE_ERROR}: Cannot use both data-hmpl and hmpl attributes`
+        `${TEMPLATE_ERROR}: Cannot use both ${DATA_HMPL_ATTR} and ${HMPL_ATTR} attributes`
       );
     }
 
-    const hasDataOptionId = template.hasAttribute("data-option-id");
-    const hasOptionId = template.hasAttribute("optionId");
+    const hasDataOptionId = template.hasAttribute(DATA_OPTION_ID_ATTR);
+    const hasOptionId = template.hasAttribute(OPTION_ID_ATTR);
     if (hasDataOptionId && hasOptionId) {
       createError(
-        `${TEMPLATE_ERROR}: Cannot use both data-option-id and optionId attributes`
+        `${TEMPLATE_ERROR}: Cannot use both ${DATA_OPTION_ID_ATTR} and ${OPTION_ID_ATTR} attributes`
       );
     }
 
     const optionId =
-      template.getAttribute("data-option-id") ||
-      template.getAttribute("optionId");
+      template.getAttribute(DATA_OPTION_ID_ATTR) ||
+      template.getAttribute(OPTION_ID_ATTR);
     let option: HMPLInitOption | undefined = undefined;
+
+    if (optionId === "") {
+      createError(
+        `${TEMPLATE_ERROR}: optionId cannot be empty. Use ${DATA_OPTION_ID_ATTR} or ${OPTION_ID_ATTR} attribute`
+      );
+    }
 
     if (optionId) {
       option = initOptionsMap.get(optionId);
+
+      if (!option) {
+        createError(
+          `${TEMPLATE_ERROR}: Option with id "${optionId}" not found. Make sure to define it in init() call`
+        );
+      }
     }
 
     const templateHTML = template.innerHTML as string;
@@ -118,9 +135,8 @@ const mountTemplates = (): void => {
       );
     }
 
-    const compileOptions = option?.value.compileOptions || {};
-    const templateFunctionOptions = option?.value.templateFunctionOptions || {};
-
+    const compileOptions = option?.value.compile || {};
+    const templateFunctionOptions = option?.value.templateFunction || {};
     const templateFn = hmpl.compile(templateHTML, compileOptions);
     const result = templateFn(templateFunctionOptions);
 
@@ -147,14 +163,16 @@ const mountTemplates = (): void => {
  *   {
  *     id: "user-card",
  *     value: {
- *       compileOptions: { memo: true },
- *       templateFunctionOptions: { credentials: "include" }
+ *       compile: { memo: true },
+ *       templateFunction: { credentials: "include" }
  *     }
  *   }
  * ]);
  * ```
  */
-export const init: HMPLInitFunction = (options: HMPLInitOption[]): void => {
+export const init: HMPLInitFunction = (
+  options: HMPLInitOption[] = []
+): void => {
   if (initialized) {
     createError(`${INIT_ERROR}: init() can only be called once`);
   }

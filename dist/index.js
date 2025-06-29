@@ -1,9 +1,11 @@
 "use strict";
 
-import { compile, stringify } from "../build/main";
+import { init } from "../src/build";
 
-const hmpl = { compile, stringify };
+const hmplDOM = {
+  init
+};
 
-export { compile, stringify };
+export { init };
 
-export default hmpl;
+export default hmplDOM;

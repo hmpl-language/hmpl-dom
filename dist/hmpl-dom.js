@@ -33,12 +33,12 @@
       return typeof val === "object" && !Array.isArray(val) && val !== null;
     };
     /**
-     * Validates the HMPLInitOption object.
+     * Validates the HMPLTemplateConfig object.
      * @param option - The option to validate.
      */
     const validateInitOption = (option) => {
       if (!checkObject(option)) {
-        createError(`${INIT_ERROR}: HMPLInitOption must be an object`);
+        createError(`${INIT_ERROR}: HMPLTemplateConfig must be an object`);
       }
       if (!option.hasOwnProperty("id") || !option.hasOwnProperty("value")) {
         createError(`${INIT_ERROR}: Missing "id" or "value" property`);

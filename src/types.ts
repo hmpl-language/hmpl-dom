@@ -11,7 +11,7 @@ import {
  * Configuration object for a single template option.
  * Contains an ID and associated value with compile and template function options.
  */
-type HMPLInitOption = {
+type HMPLTemplateConfig = {
   /**
    * Unique identifier for this option configuration.
    * Must be a string and should match the option-id attribute in HTML templates.
@@ -42,6 +42,6 @@ type HMPLInitOption = {
  * Takes an array of configuration options and sets up the template processing system.
  * Can only be called once per page lifecycle.
  */
-type HMPLInitFunction = (options: HMPLInitOption[]) => void;
+type HMPLInitFunction = (configs: HMPLTemplateConfig[]) => void;
 
-export { HMPLInitFunction, HMPLInitOption };
+export { HMPLInitFunction, HMPLTemplateConfig };

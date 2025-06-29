@@ -1,7 +1,7 @@
 "use strict";
 
 import hmpl from "hmpl-js";
-import { HMPLInitFunction, HMPLInitOption } from "./types";
+import { HMPLInitFunction, HMPLTemplateConfig } from "./types";
 
 const INIT_ERROR = `InitError`;
 const TEMPLATE_ERROR = `TemplateError`;
@@ -27,12 +27,12 @@ const checkObject = (val: any): boolean => {
 };
 
 /**
- * Validates the HMPLInitOption object.
+ * Validates the HMPLTemplateConfig object.
  * @param option - The option to validate.
  */
 const validateInitOption = (option: any): void => {
   if (!checkObject(option)) {
-    createError(`${INIT_ERROR}: HMPLInitOption must be an object`);
+    createError(`${INIT_ERROR}: HMPLTemplateConfig must be an object`);
   }
 
   if (!option.hasOwnProperty("id") || !option.hasOwnProperty("value")) {
@@ -52,7 +52,7 @@ const validateInitOption = (option: any): void => {
  * Validates that there are no duplicate IDs in the options array.
  * @param options - The array of options to validate.
  */
-const validateDuplicateIds = (options: HMPLInitOption[]): void => {
+const validateDuplicateIds = (options: HMPLTemplateConfig[]): void => {
   const ids: string[] = [];
 
   for (let i = 0; i < options.length; i++) {
@@ -66,7 +66,7 @@ const validateDuplicateIds = (options: HMPLInitOption[]): void => {
 };
 
 let initialized = false;
-const initOptionsMap = new Map<string, HMPLInitOption>();
+const initOptionsMap = new Map<string, HMPLTemplateConfig>();
 
 const onDocumentLoad = (callback: () => void): void => {
   const isDocumentLoaded =
@@ -103,7 +103,7 @@ const mountTemplates = (): void => {
     const optionId =
       template.getAttribute(DATA_OPTION_ID_ATTR) ||
       template.getAttribute(OPTION_ID_ATTR);
-    let option: HMPLInitOption | undefined = undefined;
+    let option: HMPLTemplateConfig | undefined = undefined;
 
     if (optionId === "") {
       createError(
@@ -171,17 +171,17 @@ const mountTemplates = (): void => {
  * ```
  */
 export const init: HMPLInitFunction = (
-  options: HMPLInitOption[] = []
+  configs: HMPLTemplateConfig[] = []
 ): void => {
   if (initialized) {
     createError(`${INIT_ERROR}: init() can only be called once`);
   }
   initialized = true;
 
-  validateDuplicateIds(options);
+  validateDuplicateIds(configs);
 
-  for (let i = 0; i < options.length; i++) {
-    const option = options[i];
+  for (let i = 0; i < configs.length; i++) {
+    const option = configs[i];
     validateInitOption(option);
     initOptionsMap.set(option.id, option);
   }

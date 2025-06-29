@@ -1,6 +1,6 @@
 import { init } from "../build/main";
 
-import { HMPLInitFunction, HMPLInitOption } from "../build/types";
+import { HMPLInitFunction, HMPLTemplateConfig } from "../build/types";
 
 const hmplDOM = {
   init
@@ -10,4 +10,4 @@ export { init };
 
 export default hmplDOM;
 
-export type { HMPLInitFunction, HMPLInitOption };
+export type { HMPLInitFunction, HMPLTemplateConfig };

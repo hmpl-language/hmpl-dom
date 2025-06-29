@@ -17,38 +17,32 @@ npm install hmpl-dom
 Add a template to your HTML file using the `<template>` tag and the `data-hmpl` or `hmpl` attribute:
 
 ```html
-<template data-hmpl data-option-id="my-component-option">
-  <div>
-    {{#request src="/api/my-component.html"}}
-      {{#indicator trigger="pending"}}
-        Loading...
-      {{/indicator}}
-    {{/request}}
-  </div>
-</template>
-<script src="https://unpkg.com/json5/dist/index.min.js"></script>
-<script src="https://unpkg.com/dompurify/dist/purify.min.js"></script>
-<script src="https://unpkg.com/hmpl-js/dist/hmpl.min.js"></script>
-<script src="https://unpkg.com/hmpl-dom/dist/hmpl-dom.min.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example</title>
+</head>
+<body>
+  <main>
+    <template data-hmpl data-option-id="my-component-option">
+      <div>
+        {{#request src="/api/my-component.html"}}
+          {{#indicator trigger="pending"}}
+            Loading...
+          {{/indicator}}
+        {{/request}}
+      </div>
+    </template>
+  </main>
+  <script src="https://unpkg.com/json5/dist/index.min.js"></script>
+  <script src="https://unpkg.com/dompurify/dist/purify.min.js"></script>
+  <script src="https://unpkg.com/hmpl-js/dist/hmpl.min.js"></script>
+  <script src="https://unpkg.com/hmpl-dom/dist/hmpl-dom.min.js"></script>
+</body>
+</html>
 ```
-
-In your JavaScript code, initialize the system:
-
-```javascript
-import { init } from "hmpl-dom";
-
-init([
-  {
-    id: "my-component-option",
-    value: {
-      compile: { memo: true },
-      templateFunction: { credentials: "include" }
-    }
-  }
-]);
-```
-
-After initialization, all templates with the corresponding `data-option-id` will be automatically compiled and inserted into the DOM.
 
 ## Options
 

@@ -7,8 +7,8 @@ const INIT_ERROR = `InitError`;
 const TEMPLATE_ERROR = `TemplateError`;
 const DATA_HMPL_ATTR = "data-hmpl";
 const HMPL_ATTR = "hmpl";
-const DATA_OPTION_ID_ATTR = "data-option-id";
-const OPTION_ID_ATTR = "optionId";
+const DATA_CONFIG_ID_ATTR = "data-config-id";
+const CONFIG_ID_ATTR = "configId";
 
 /**
  * Throws a new error with the provided message.
@@ -92,31 +92,31 @@ const mountTemplates = (): void => {
       );
     }
 
-    const hasDataOptionId = template.hasAttribute(DATA_OPTION_ID_ATTR);
-    const hasOptionId = template.hasAttribute(OPTION_ID_ATTR);
-    if (hasDataOptionId && hasOptionId) {
+    const hasDataConfigId = template.hasAttribute(DATA_CONFIG_ID_ATTR);
+    const hasConfigId = template.hasAttribute(CONFIG_ID_ATTR);
+    if (hasDataConfigId && hasConfigId) {
       createError(
-        `${TEMPLATE_ERROR}: Cannot use both ${DATA_OPTION_ID_ATTR} and ${OPTION_ID_ATTR} attributes`
+        `${TEMPLATE_ERROR}: Cannot use both ${DATA_CONFIG_ID_ATTR} and ${CONFIG_ID_ATTR} attributes`
       );
     }
 
-    const optionId =
-      template.getAttribute(DATA_OPTION_ID_ATTR) ||
-      template.getAttribute(OPTION_ID_ATTR);
+    const configId =
+      template.getAttribute(DATA_CONFIG_ID_ATTR) ||
+      template.getAttribute(CONFIG_ID_ATTR);
     let option: HMPLTemplateConfig | undefined = undefined;
 
-    if (optionId === "") {
+    if (configId === "") {
       createError(
-        `${TEMPLATE_ERROR}: optionId cannot be empty. Use ${DATA_OPTION_ID_ATTR} or ${OPTION_ID_ATTR} attribute`
+        `${TEMPLATE_ERROR}: configId cannot be empty. Use ${DATA_CONFIG_ID_ATTR} or ${CONFIG_ID_ATTR} attribute`
       );
     }
 
-    if (optionId) {
-      option = initOptionsMap.get(optionId);
+    if (configId) {
+      option = initOptionsMap.get(configId);
 
       if (!option) {
         createError(
-          `${TEMPLATE_ERROR}: Option with id "${optionId}" not found. Make sure to define it in init() call`
+          `${TEMPLATE_ERROR}: Option with id "${configId}" not found. Make sure to define it in init() call`
         );
       }
     }

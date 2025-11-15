@@ -1,6 +1,6 @@
 {
   "name": "hmpl-dom",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A module for using HMPL syntax directly in HTML, without the need for compilation on the JavaScript side",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
